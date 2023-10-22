@@ -52,7 +52,7 @@ const register = async (req, res) => {
         const subject = 'Account Verification'
         verififemail(email,subject,link);
 
-           res.json({
+           res.status(201).json({
             'message' : 'activer votre compte virefier votre mail',
             'user': newUser,
             'token' : accessToken,
@@ -85,7 +85,7 @@ const login = async (req , res)=>{
          const loginPassword = req.body.password;
          const verifyexistEmail = await userModel.findOne({ email :loginEmail})
          if (!verifyexistEmail) {
-              return  res.json({
+              return  res.status(400).json({
                     "message" : "email invalid  ",
                 })
         }
@@ -101,7 +101,7 @@ const login = async (req , res)=>{
         //     sameSite: 'Strict', // Protects against CSRF attacks
         //     maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
         //   });
-            return res.json({
+            return res.status(200).json({
                 "message" : " vous aver crée un compte avec success",
                 "data": verifyexistEmail,
                 "token" : accessToken
@@ -110,7 +110,7 @@ const login = async (req , res)=>{
         }           
         else{
 
-             return res.json({
+             return res.status(400).json({
                  "message" : "password is incorrecte",
              })
 

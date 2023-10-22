@@ -1,8 +1,11 @@
 const express = require('express');
 const usersRouter = require('./routes/api');
 const dotenv = require('dotenv').config();
-const app = express();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const app = express();
+
+app.use(cookieParser());
 
 const connectDatabase = require('./config/db'); // Correct function name
 

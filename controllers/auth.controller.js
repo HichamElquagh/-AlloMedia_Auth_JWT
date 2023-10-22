@@ -5,18 +5,15 @@ const roleModel = require('../models/role.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-let verif = true;
+const generateAccessToken = require('../services/jwtToken')
+const verififemail = require('../services/verifEmail');
+const verifToken = require('../services/verifToken')
+
 
 const register = async (req, res) => {
     
     try {
-        // if(verif){
-        //     const roleName = ['client', 'admin', 'manager'];
-        //     const addrole = await roleModel.insertMany(roleName.map(role_name=>({role_name})));
 
-        //     verif = false;
-        // }
-        // Vérifier si l'e-mail est déjà utilisé
         const existingUser = await userModel.findOne({ email: req.body.email });
         if (existingUser) {
             return res.status(400).json({ message: 'Cet e-mail est déjà utilisé. Veuillez choisir un autre e-mail.' });
@@ -45,51 +42,21 @@ const register = async (req, res) => {
         // Enregistrer l'utilisateur dans la base de données
         await newUser.save()
         const accessToken = generateAccessToken ({user: req.body.email})
+        console.log('pour register ' + accessToken);
         // const refreshToken = generateRefreshToken ({user: req.body.email})
      
         // Répondre avec le nouvel utilisateur
       
         const link = `http://localhost:3000/api/verifemail?token=${accessToken}`;
         const email = req.body.email
-        const verififemail = async (email,link)=>{
+        const subject = 'Account Verification'
+        verififemail(email,subject,link);
 
-    
-        const transport = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-                user: "70689edb6eeaba",
-                pass: "9ac5f8be3fac52"
-            }
-            });
-          
-          const mailOptions = {
-            from: 'hicham@support.com',
-            to: email, 
-            subject: 'Account Verification',
-            text: 'Welcome ',
-            html: `<p>Click the button below to verify your account:</p>
-            <a href=${link} style="background-color: #4CAF50; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin-top: 20px;">Verify Account</a>
-            
-            `
-          };
-          
-          transport.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error.message);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
-        };
-        verififemail(email,link)
-        res.status(200).json({
-            status: 200,
-            message: 'Utilisateur enregistré avec succès.',
-            message : 'voir ton mail ',
-            data: newUser,
-            accessToken: accessToken
-        });
+           res.json({
+            'message' : 'activer votre compte virefier votre mail',
+            'user': newUser,
+            'token' : accessToken,
+           })
        
 
     } catch (error) {
@@ -99,12 +66,6 @@ const register = async (req, res) => {
 
     
 
-       // accessTokens
-    function generateAccessToken(user) {
-        const algorithm = 'HS256'; // Spécifiez l'algorithme ici
-       const accessToken =  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {algorithm: algorithm, expiresIn: "10m"}) 
-       return accessToken;
-        }
         // refreshTokens
     // let refreshTokens = []
     // function generateRefreshToken(user) {
@@ -123,16 +84,27 @@ const login = async (req , res)=>{
          const loginEmail = req.body.email;
          const loginPassword = req.body.password;
          const verifyexistEmail = await userModel.findOne({ email :loginEmail})
-         console.log(verifyexistEmail.password , loginPassword);
          if (!verifyexistEmail) {
               return  res.json({
                     "message" : "email invalid  ",
                 })
         }
-        if (bcrypt.compare(loginPassword,verifyexistEmail.password)){
+        if (await bcrypt.compare(loginPassword,verifyexistEmail.password)){
 
+
+        const accessToken = generateAccessToken ({user : loginEmail})
+
+
+        // res.cookie('access_token', accessToken, {
+        //     httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
+        //     secure: true, // Ensures the cookie is only sent over HTTPS in production
+        //     sameSite: 'Strict', // Protects against CSRF attacks
+        //     maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
+        //   });
             return res.json({
                 "message" : " vous aver crée un compte avec success",
+                "data": verifyexistEmail,
+                "token" : accessToken
             })
 
         }           
@@ -156,7 +128,180 @@ const login = async (req , res)=>{
 
 };
 
+
+const verifyAcountwithchecktoken = async(req , res)=> {
+            const  token = req.query.token;
+        try {
+
+            const ischecked = verifToken(token)
+
+            if(ischecked){
+                const email = ischecked;
+
+            const virefmail = await userModel.findOneAndUpdate(
+                { email: email }, 
+                { $set : { isverified : true } }, 
+                { new: true },
+            );
+            res.send('votre compte a éte virefier');
+
+
+            
+        }else{
+
+            res.send('virefication est expiré .');
+
+
+        }
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+const forgotPassword = async (req , res )=>{
+    console.log("ee forgotpassss ");
+    const email = req.body.email;
+    console.log(email);
+
+    try {
+        
+        const verifyexistEmail = await userModel.findOne({
+            email : email,
+        });
+
+
+        console.log(verifyexistEmail);
+        if(verifyexistEmail){
+            console.log(email);
+            const accessToken = generateAccessToken({user: email})
+            console.log(accessToken);
+
+            const link = `http://localhost:3000/api/resetpassword?token=${accessToken}`;
+            const subject = 'Reset Password'
+
+            verififemail(email,subject,link);
+
+            res.json({
+                "message" : "check your mail"
+            })
+     
+
+            
+
+
+
+        }else{
+
+                res.json({
+                    "message" : "pas de compte avec ce email"
+                })
+        }
+
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const resetPassword =   async (req, res)=>{
+
+
+    const  token = req.query.token;
+    console.log("after check email " + token);
+    try {
+        console.log("after check email " + token);
+
+        const ischecked = verifToken(token)
+
+        console.log("after email for check tokeen " + ischecked);
+
+        if(ischecked){
+
+        //     console.log( "hhhhhhhhhhhhhhh   lkhrrr");
+        // res.cookie('access_token', token, {
+        //     httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
+        //     secure: true, // Ensures the cookie is only sent over HTTPS in production
+        //     sameSite: 'Strict', // Protects against CSRF attacks
+        //     maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
+        //   });
+              
+        res.send('vous pouver changer votre password ');
+
+
+        
+    }else{
+
+        res.send('email inconnu');
+
+
+    }
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+    
+
+
+}
+
+const resetPasswordAfterVerif = async (req , res)=>{
+          
+    const  token = req.query.token;
+
+    const newpassword = req.body.password
+
+    try {
+
+        const ischecked = verifToken(token)
+
+        if(ischecked){
+            const email = ischecked;
+
+        const virefmail = await userModel.findOneAndUpdate(
+            { email: email }, 
+            { $set : { password :  newpassword} }, 
+            { new: true },
+        );
+        res.send('votre password et changer ');
+
+
+        
+    }else{
+
+        res.send('expirationd de password.');
+
+
+    }
+    } catch (error) {
+        console.log(error.message);
+        
+    }
+
+
+
+
+
+}
+
 module.exports = {
     register,
-    login
+    login,
+    verifyAcountwithchecktoken,
+    forgotPassword,
+    resetPassword,
+    resetPasswordAfterVerif
 };

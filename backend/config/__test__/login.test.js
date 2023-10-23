@@ -1,7 +1,7 @@
-const { login } = require('../controllers/auth.controller');
-const userModel = require('../models/users');
+const { login } = require('../../backend/controllers/auth.controller');
+const userModel = require('../../models/users');
 const bcrypt = require('bcrypt');
-const generateAccessToken = require('../services/jwtToken');
+const generateAccessToken = require('../../services/jwtToken');
 
 jest.mock('../models/users');
 jest.mock('../services/jwtToken'); // Mock the jwtToken service
@@ -44,12 +44,11 @@ describe('Auth Controller Tests', () => {
 
     const existingUser = {
       email: 'existing@example.com',
-      password: await bcrypt.hash('correctpassword', 10), // Assuming the correct hashed password
+      password: await bcrypt.hash('correctpassword', 10), 
     };
 
     userModel.findOne.mockResolvedValue(existingUser);
-    jest.spyOn(bcrypt, 'compare').mockResolvedValue(false); // For incorrect password scenario
-
+    jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
     await login(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
@@ -62,20 +61,20 @@ describe('Auth Controller Tests', () => {
     const req = {
       body: {
         email: 'existing@example.com',
-        password: 'correctpassword', // Assuming the correct plain password
+        password: 'correctpassword', 
       },
     };
 
     const existingUser = {
       email: 'existing@example.com',
-      password: await bcrypt.hash('correctpassword', 10), // Assuming the correct hashed password
+      password: await bcrypt.hash('correctpassword', 10), 
       // Other user data properties...
     };
 
     userModel.findOne.mockResolvedValue(existingUser);
-    jest.spyOn(bcrypt, 'compare').mockResolvedValue(true); // For correct password scenario
+    jest.spyOn(bcrypt, 'compare').mockResolvedValue(true); 
 
-    const accessToken = 'mockAccessToken'; // Assuming the generated access token
+    const accessToken = 'mockAccessToken'; 
 
     generateAccessToken.mockReturnValue(accessToken);
 

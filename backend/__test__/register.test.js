@@ -1,14 +1,14 @@
 const {
   register
-} = require('../controllers/auth.controller');
+} = require('../../../controllers/auth.controller');
 
-const userModel = require('../models/users');
-const roleModel = require('../models/role.model');
+const userModel = require('../../../models/users');
+const roleModel = require('../../../models/role.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const generateAccessToken = require('../services/jwtToken');
-const verififemail = require('../services/verifEmail');
+const generateAccessToken = require('../../../services/jwtToken');
+const verififemail = require('../../../services/verifEmail');
 
 jest.mock('../models/users');
 jest.mock('../models/role.model');
@@ -30,7 +30,7 @@ describe('Auth Controller Register Tests', () => {
     const req = {
       body: {
         email: 'existing@example.com',
-        // other required fields
+    
       }
     };
 
@@ -49,7 +49,7 @@ describe('Auth Controller Register Tests', () => {
       body: {
         email: 'new@example.com',
         role: 'invalidRole',
-        // other required fields
+    
       }
     };
 
@@ -68,7 +68,7 @@ describe('Auth Controller Register Tests', () => {
       body: {
         email: 'manager@example.com',
         role: 'manager',
-        // other required fields
+        
       }
     };
 
@@ -87,7 +87,7 @@ describe('Auth Controller Register Tests', () => {
       body: {
         email: 'new@example.com',
         role: 'client',
-        // other required fields
+        
       }
     };
 

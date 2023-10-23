@@ -1,13 +1,13 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
-const userModel = require('../models/users');
-const roleModel = require('../models/role.model');
+const userModel = require('../../models/users');
+const roleModel = require('../../models/role.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const generateAccessToken = require('../services/jwtToken')
-const verififemail = require('../services/verifEmail');
-const verifToken = require('../services/verifToken')
+const generateAccessToken = require('../../services/jwtToken')
+const verififemail = require('../../services/verifEmail');
+const verifToken = require('../../services/verifToken')
 
 
 const register = async (req, res) => {

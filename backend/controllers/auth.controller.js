@@ -1,13 +1,13 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
-const userModel = require('../../models/users');
-const roleModel = require('../../models/role.model');
+const userModel = require('../models/users');
+const roleModel = require('../models/role.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const generateAccessToken = require('../../services/jwtToken')
-const verififemail = require('../../services/verifEmail');
-const verifToken = require('../../services/verifToken')
+const generateAccessToken = require('../services/jwtToken')
+const verififemail = require('../services/verifEmail');
+const verifToken = require('../services/verifToken')
 
 
 const register = async (req, res) => {
@@ -51,8 +51,8 @@ const register = async (req, res) => {
         const email = req.body.email
         const subject = 'Account Verification'
         verififemail(email,subject,link);
-
-           res.status(201).json({
+  
+           return res.status(201).json({
             'message' : 'activer votre compte virefier votre mail',
             'user': newUser,
             'token' : accessToken,

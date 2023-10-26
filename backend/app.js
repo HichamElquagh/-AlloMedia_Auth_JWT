@@ -4,6 +4,9 @@ const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
+const cors = require('cors')
+
+
 
 app.use(cookieParser());
 
@@ -15,11 +18,13 @@ app.use(bodyParser.json());
 
 connectDatabase(); // Call the correct function here
 
-const PORT = 3000;
-
+const PORT = 3001;
+app.use(cors({
+  origin:"http://localhost:3000"
+}))
 app.use('/api', usersRouter);
 
 
-app.listen(PORT, () => {
+app.listen(PORT , () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../contexts/AuthContext";
 
 
  
@@ -16,8 +17,8 @@ import { useForm } from "react-hook-form";
 export default function Login(){
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
+const { register, handleSubmit, formState: { errors } } = useForm();
+const { login } = useAuth();
 
 const [formData , setData] = useState({
     email: "",
@@ -37,7 +38,8 @@ const OnSubmit = async (data) => {
         // Faites la requête POST vers votre API d'enregistrement
         const response = await axios.post("http://localhost:3001/api/login", data);
           if (response.data.message){
-
+              login(response.data.data)
+              
             toast.success(response.data.message, {
                 position: toast.POSITION.TOP_RIGHT, // Position en haut à droite
                 style: {
@@ -76,11 +78,11 @@ const OnSubmit = async (data) => {
 
 
     return (
-        <div className='grid grid-cols-1 sm:grid-cols-2 h-[90vh] w-full' >
+        <div className='grid grid-cols-1  h-[90vh] w-full' >
             
             <div className="flex flex-col justify-center">
                 <form onSubmit={handleSubmit(OnSubmit)}
-                className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/20 p-8 px-8 rounded-lg" action="">
+                className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/30 p-8 px-8 rounded-lg" action="">
                     <h2 className="text-4xl dark:text-white font-bold text-center">Login</h2>
                   
                     <div className=" flex flex-col text-gray-400 py-2">

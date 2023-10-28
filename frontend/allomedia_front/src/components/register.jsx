@@ -30,39 +30,29 @@ export default function Register() {
   const onSubmit = async (data) => {
     try {
       // console.log(formData);
-      // Faites la requête POST vers votre API d'enregistrement
       const response = await axios.post(
         "http://localhost:3001/api/register",
         data
       );
-      const responseData = response.data; // Accédez à la réponse de l'API
+      const responseData = response.data; 
 
-      // console.log('for message '+ responseData.message); // Affichez le message renvoyé par l'API dans la console
-      // console.log(responseData.user); // Accédez à l'objet utilisateur renvoyé par l'API
-      // console.log('for token ' +responseData.token); // A // Affichez la réponse de l'API dans la console
+      
       if (responseData.message) {
+        console.log(responseData);
         toast.success(responseData.message, {
-          position: toast.POSITION.TOP_RIGHT, // Position en haut à droite
+          position: toast.POSITION.TOP_RIGHT, 
           style: {
             marginTop: "4rem",
-            background: "#007bff", // Couleur de fond bleue
-            color: "#fff", // Couleur du texte blanc
-            borderRadius: "10px", // Coins arrondis
-            padding: "15px 25px", // Espacement interne
-            fontSize: "18px", // Taille du texte
-            textAlign: "center", // Centrer le texte horizontalement
+            background: "#007bff", 
+            color: "#fff", 
+            borderRadius: "10px", 
+            padding: "15px 25px", 
+            fontSize: "18px", 
+            textAlign: "center", 
           },
         });
       }
-      // Réinitialisez le formulaire après l'enregistrement réussi si nécessaire
-      // setData({
-      //     firstName: "",
-      //     lastName: "",
-      //     email: "",
-      //     password: "",
-      //     confirmPassword: "",
-      //     role: ""
-      // });
+
     } catch (error) {
       if(error.response){
 
@@ -86,11 +76,11 @@ export default function Register() {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 h-[90vh] w-full">
+    <div className="grid grid-cols-1  h-[90vh] w-full">
       <div className="flex flex-col justify-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/20 p-8 px-8 rounded-lg"
+          className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/30 p-8 px-8 rounded-lg"
           action=""
         >
           <h2 className="text-4xl dark:text-white font-bold text-center">
@@ -100,15 +90,16 @@ export default function Register() {
             <label
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               htmlFor=""
-              
+
             >
               First Name
             </label>
             <input
+            {...register("first_name", {required: "first_name is required" })}
               className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none "
               type="text"
-              name="first_name"
-            />
+                     />
+            <span className="text-red-500 text-sm">{errors.first_name?.message}</span>
           </div>
           <div className=" flex flex-col text-gray-400 py-2">
             <label
@@ -118,10 +109,12 @@ export default function Register() {
               Last Name
             </label>
             <input
+             {...register("last_name", {required: "last_name is required" })}
+
               className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none "
               type="text"
-              name="last_name"
-            />
+                    />
+            <span className="text-red-500 text-sm">{errors.last_name?.message}</span>
           </div>
           <div className=" flex flex-col text-gray-400 py-2">
             <label
@@ -131,29 +124,31 @@ export default function Register() {
               Email
             </label>
             <input
+             {...register("email", {required: "Email is required" })}
+
               className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none "
               type="email"
-              name="email"
-            />
+                />
+            <span className="text-red-500 text-sm">{errors.email?.message}</span>
           </div>
-          <div className=" flex flex-col text-gray-400 py-2 ">
-            <label
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="countries"
-            >
-              Select an option
-            </label>
-            <select
-              id="countries"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              name="role"
-              value={formData.role}
-            >
-              <option value="">Choisissez votre rôle</option>
-              <option value="livreur">Livreur</option>
-              <option value="client">Client</option>
-            </select>
-          </div>
+          <div className="flex flex-col text-gray-400 py-2">
+                <label
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="countries"
+                >
+                    Select an option
+                </label>
+                <select
+                    id="countries"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    {...register("role", { required: "Role is required" })}
+                >
+                    <option value="">Choisissez votre rôle</option>
+                    <option value="livreur">Livreur</option>
+                    <option value="client">Client</option>
+                </select>
+                <span className="text-red-500 text-sm">{errors.role?.message}</span>
+            </div>
           <div className=" flex flex-col text-gray-400 py-2 ">
             <label
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -162,10 +157,12 @@ export default function Register() {
               Password
             </label>
             <input
+             {...register("password", {required: "password is required" })}
+
               className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none "
               type="password"
-              name="password"
-            />
+                   />
+            <span className="text-red-500 text-sm">{errors.password?.message}</span>
           </div>
 
           <div className=" flex flex-col text-gray-400 py-2 ">
@@ -176,10 +173,14 @@ export default function Register() {
               Confirm Password
             </label>
             <input
+             {...register("confirm_password", {required: "confirm_password is required" })}
+
               className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none "
               type="password"
-              name="confirm_password"
+
+              
             />
+            <span className="text-red-500 text-sm">{errors.confirm_password?.message}</span>
           </div>
           {/* <div className=" flex justify-between text-gray-400 py-2" >
                         <p className=" flex items-center"><input className="mr-2" type="checkbox" /> Remember me</p>

@@ -8,10 +8,13 @@ import Register from "./components/register"
 import Navbar from "./components/navbar"
 import ForgotPassword from "./components/forgot.password"
 import ResetPassword from "./components/reset.password"
+import { AuthProvider } from "./contexts/AuthContext";
+
 
 function App() {
   return (
     <main className="landing-page bg-brand-80 h-full w-full flex flex-col overflow-scroll">
+      <AuthProvider> 
     <ToastContainer />
     <BrowserRouter>
     <Navbar />
@@ -23,6 +26,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </AuthProvider>
     </main>
   );
 }

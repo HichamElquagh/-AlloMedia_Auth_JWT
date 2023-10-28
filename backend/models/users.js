@@ -48,13 +48,13 @@ const UserSchema = new Schema({
 
 // hash user password before saving into database
 
-UserSchema.pre('save', async function(next) {
-  try {
-    const hashedPassword = await bcrypt.hash(this.password, saltRounds);
-    this.password = hashedPassword;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+// UserSchema.pre('save', async function(next) {
+//   try {
+//     const hashedPassword = await bcrypt.hash(this.password, saltRounds);
+//     this.password = hashedPassword;
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 module.exports = mongoose.model('User', UserSchema);

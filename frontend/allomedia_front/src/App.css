@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+#root{
+  background-image: url(../src/assets/front.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+}
+::-webkit-scrollbar{
+  display: none;
+}
+
+/* styles.css ou votre fichier de styles CSS */
+.custom-toast {
+  background-color: #007bff; /* Couleur de fond bleue */
+  color: #fff; /* Couleur du texte blanc */
+  border-radius: 10px; /* Coins arrondis plus prononcés */
+  padding: 15px 25px; /* Espacement interne plus grand */
+  font-size: 18px; /* Taille du texte plus grande */
+  text-align: center; /* Centrer le texte horizontalement */
+}

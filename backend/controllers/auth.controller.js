@@ -28,6 +28,7 @@ const register = async (req, res) => {
         }
 
         // Hacher le mot de passe
+        console.log('for password register' , req.body.password.length,);
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         // Créer un nouvel utilisateur
@@ -85,22 +86,27 @@ const login = async (req , res)=>{
          const loginPassword = req.body.password;
          const verifyexistEmail = await userModel.findOne({ email :loginEmail})
          if (!verifyexistEmail) {
-              return  res.status(400).json({
+              return  res.status(404).json({
                     "message" : "email invalid  ",
                 })
         }
-        if (await bcrypt.compare(loginPassword,verifyexistEmail.password)){
+        console.log('for password login' ,loginPassword.length , '000000');
+        console.log('this is for hash password comming from user table',verifyexistEmail.password);
+
+        const comparePassword =  await bcrypt.compare(loginPassword,verifyexistEmail.password)
+        console.log(comparePassword);
+        if (comparePassword){
 
 
         const accessToken = generateAccessToken ({user : loginEmail})
 
+        res.cookie('access_token', accessToken, {
+            httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
+            secure: process.env.NODE_ENV === 'production', // Ensures the cookie is only sent over HTTPS in production
+            sameSite: 'Strict', // Protects against CSRF attacks
+            maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
+        });
 
-        // res.cookie('access_token', accessToken, {
-        //     httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
-        //     secure: true, // Ensures the cookie is only sent over HTTPS in production
-        //     sameSite: 'Strict', // Protects against CSRF attacks
-        //     maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
-        //   });
             return res.status(200).json({
                 "message" : " vous aver crée un compte avec success",
                 "data": verifyexistEmail,
@@ -190,7 +196,7 @@ const forgotPassword = async (req , res )=>{
             const accessToken = generateAccessToken({user: email})
             console.log(accessToken);
 
-            const link = `http://localhost:3000/api/resetpassword?token=${accessToken}`;
+            const link = `http://localhost:3000/reset-password?token=${accessToken}`;
             const subject = 'Reset Password'
 
             verififemail(email,subject,link);
@@ -199,11 +205,6 @@ const forgotPassword = async (req , res )=>{
                 "message" : "check your mail"
             })
      
-
-            
-
-
-
         }else{
 
                 res.json({
@@ -260,8 +261,8 @@ const resetPassword =   async (req, res)=>{
 
 const resetPasswordAfterVerif = async (req , res)=>{
           
-    const  token = req.query.token;
-
+    const  token = req.body.token;
+    console.log("this is token com from front restpassword ", token);
     const newpassword = req.body.password
 
     try {
@@ -269,11 +270,13 @@ const resetPasswordAfterVerif = async (req , res)=>{
         const ischecked = verifToken(token)
 
         if(ischecked){
+            hashpassword = await bcrypt.hash(newpassword ,10)
             const email = ischecked;
+            console.log('ce email est envoiyer depuis verif token in reset password  ',email);
 
         const virefmail = await userModel.findOneAndUpdate(
             { email: email }, 
-            { $set : { password :  newpassword} }, 
+            { $set : { password :  hashpassword} }, 
             { new: true },
         );
         res.send('votre password et changer ');

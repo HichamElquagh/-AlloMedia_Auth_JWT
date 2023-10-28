@@ -4,6 +4,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
 
  
 
@@ -13,24 +15,27 @@ import { Link } from "react-router-dom";
 
 export default function Login(){
 
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+
 const [formData , setData] = useState({
     email: "",
     password: "",
 });
 
 
-const handleInputChange = (e) => {
-    setData({
-        ...formData,
-        [e.target.name]: e.target.value
-    });
-};
-const handleSubmit = async (e) => {
-    e.preventDefault();
+// const handleInputChange = (e) => {
+//     setData({
+//         ...formData,
+//         [e.target.name]: e.target.value
+//     });
+// };
+const OnSubmit = async (data) => {
     try {
-        console.log(formData);
+        // console.log(formData);
         // Faites la requête POST vers votre API d'enregistrement
-        const response = await axios.post("http://localhost:3001/api/login", formData);
+        const response = await axios.post("http://localhost:3001/api/login", data);
           if (response.data.message){
 
             toast.success(response.data.message, {
@@ -74,7 +79,7 @@ const handleSubmit = async (e) => {
         <div className='grid grid-cols-1 sm:grid-cols-2 h-[90vh] w-full' >
             
             <div className="flex flex-col justify-center">
-                <form onSubmit={handleSubmit}
+                <form onSubmit={handleSubmit(OnSubmit)}
                 className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/20 p-8 px-8 rounded-lg" action="">
                     <h2 className="text-4xl dark:text-white font-bold text-center">Login</h2>
                   
@@ -82,21 +87,27 @@ const handleSubmit = async (e) => {
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">
                             Email
                         </label>
-                        <input className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none " type="email"
+                        <input 
+                         {...register("email", { required: "Email is required" })}
+                        className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none " type="email"
                         name="email"
-                        onChange={handleInputChange}
-                        
                         />
+                        <span className="text-red-500 text-sm">{errors.email?.message}</span>
+
                     </div>
                    
                     <div className=" flex flex-col text-gray-400 py-2 ">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="">
                             Password
                         </label>
-                        <input className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none " type="password" 
+                        <input 
+                          {...register("password", { required: "Password is required" })}
+ 
+                        className="rounded-lg bg-gray-700 mt-2 p-2 focus:blue-500 focus:bg-gray-800 focus:outline-none " type="password" 
                          name="password"
-                         onChange={handleInputChange}
-                        />
+                         />
+                        <span className="text-red-500 text-sm">{errors.password?.message}</span>
+
                     </div>
                
                     <div className=" flex justify-between text-gray-400 py-2" >

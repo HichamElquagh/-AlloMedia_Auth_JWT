@@ -84,7 +84,12 @@ const login = async (req , res)=>{
        try {
          const loginEmail = req.body.email;
          const loginPassword = req.body.password;
-         const verifyexistEmail = await userModel.findOne({ email :loginEmail})
+         const verifyexistEmail = await userModel.findOne({ email: loginEmail })
+         .populate('role', 'role_name')
+        //  .select('-_id -password -isverified');
+
+         console.log(verifyexistEmail);
+        console.log(verififemail);
          if (!verifyexistEmail) {
               return  res.status(404).json({
                     "message" : "email invalid  ",
@@ -109,7 +114,12 @@ const login = async (req , res)=>{
 
             return res.status(200).json({
                 "message" : " vous aver crée un compte avec success",
-                "data": verifyexistEmail,
+                "data": {
+                    first_name: verifyexistEmail.first_name,
+                    last_name : verifyexistEmail.last_name,
+                    email: verifyexistEmail.email,
+                    role: verifyexistEmail.role.role_name
+                },
                 "token" : accessToken
             })
 

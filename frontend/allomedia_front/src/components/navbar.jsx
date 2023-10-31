@@ -44,7 +44,17 @@
       <div>
               {user ? (
           <div>
+            <div className="flex items-center space-x-4">
             <p className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Welcome, {user.first_name}</p>
+              <img
+                className="w-8 h-8 rounded-full"
+                src={user.profileImage} // Set the user's profile image source here
+                alt="Profile"
+              />
+              <button onClick={logout} className="text-gray-900 hover:text-blue-700 dark:text-white dark:hover:text-blue-500">
+                Logout
+              </button>
+            </div>
             {/* <button onClick={logout}>Logout</button> */}
           </div>
         ) : (

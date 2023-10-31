@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ForgotPassword() {
     const [formData, setFormData] = useState({
         email: "",
     });
+
+    const ifregister = useAuth();
+    const navigate = useNavigate();
+  
+    useEffect(()=>{
+
+        if (ifregister){
+           navigate('/home')
+        }
+    }, [ifregister, navigate])
 
     const handleInputChange = (e) => {
         setFormData({

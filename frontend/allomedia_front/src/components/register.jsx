@@ -1,25 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import front from "../assets/front.jpg"
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../contexts/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const [formData, setData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
-
+  // const [formData, setData] = useState({
+  //   first_name: "",
+  //   last_name: "",
+  //   email: "",
+  //   password: "",
+  //   confirm_password: "",
+  // });
   const {
     register,
     handleSubmit,
     formState: {errors},
   } = useForm();
 
+  const ifregister = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+     if (ifregister) {
+        navigate('/home')      
+     }
+  },[ifregister, navigate])
+  
 
   // const handleInputChange = (e) => {
   //   setData({
@@ -80,7 +90,7 @@ export default function Register() {
       <div className="flex flex-col justify-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/30 p-8 px-8 rounded-lg"
+          className="max-w-[400px] w-full mx-auto bg-gray-900 bg-opacity-30 p-8 rounded-lg"
           action=""
         >
           <h2 className="text-4xl dark:text-white font-bold text-center">

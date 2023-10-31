@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import front from "../assets/front.jpg"
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -20,13 +20,25 @@ export default function Login(){
 
 const { register, handleSubmit, formState: { errors } } = useForm();
 const { login } = useAuth();
-
-const [formData , setData] = useState({
-    email: "",
-    password: "",
-});
-
 const navigate = useNavigate();
+
+useEffect(() => {
+    // Check if the user is already logged in
+    if (login) {
+      navigate('/home'); // Redirect to home if the user is already logged in
+    }
+  }, [login, navigate]); 
+
+{/* const [formData , setData] = useState({
+     email: "",
+    password: "",
+ }); */}
+
+// const navigate = useNavigate();
+
+// if(login){
+//     navigate('/home')
+// }
 
 
 // const handleInputChange = (e) => {
@@ -41,12 +53,12 @@ const OnSubmit = async (data) => {
         // Faites la requête POST vers votre API d'enregistrement
         const response = await axios.post("http://localhost:3001/api/login", data);
           if (response.data.message){
+            console.log(response.data.data);
             localStorage.setItem("user", JSON.stringify(response.data.data))
               login(response.data.data)
-
-
-              navigate('/')
-              
+              if (response.data.data) {
+                 <Navigate to="/home" />;
+              }              
             toast.success(response.data.message, {
                 position: toast.POSITION.TOP_RIGHT, // Position en haut à droite
                 style: {
@@ -89,7 +101,7 @@ const OnSubmit = async (data) => {
             
             <div className="flex flex-col justify-center">
                 <form onSubmit={handleSubmit(OnSubmit)}
-                className="max-w-[400px] w-full mx-auto bg-gray-900 backdrop-blur-sm bg-white/30 p-8 px-8 rounded-lg" action="">
+                className="max-w-[400px] w-full mx-auto  bg-gray-900 bg-opacity-30 p-8 rounded-lg" action="">
                     <h2 className="text-4xl dark:text-white font-bold text-center">Login</h2>
                   
                     <div className=" flex flex-col text-gray-400 py-2">

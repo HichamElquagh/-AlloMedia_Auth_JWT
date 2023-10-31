@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+
 
 export default function ResetPassword() {
 
@@ -8,6 +10,15 @@ export default function ResetPassword() {
         password: "",
         // confirmPassword: "",
     });
+
+  const ifregister = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+     if (ifregister) {
+        navigate('/home')      
+     }
+  },[ifregister, navigate])
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token");

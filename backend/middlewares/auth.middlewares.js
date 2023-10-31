@@ -51,12 +51,8 @@ const validateRegistrationData = [
       const checktoken =verifToken(token)
 
       if(checktoken){
-
-        const userdata = userModel.findOne({email : checktoken})
          next();
-
       }else{
-
         return res.json({
           message : "token expired"
          })
@@ -68,6 +64,28 @@ const validateRegistrationData = [
     }
 
   }
+  const isAuth = async(req,res,next)=>{
+    const token = req.cookies.token;
+
+    if (!token) {
+
+      next()  
+      }else{
+      const checktoken =verifToken(token)
+
+      if(checktoken){
+        return res.json({
+          message: "vous aver deja fais login"
+        })
+      }
+
+
+      
+
+    }
+
+
+  }
 
 
 
@@ -75,6 +93,8 @@ const validateRegistrationData = [
 
 module.exports = {
     validateRegistrationData,
-    validateloginData
+    validateloginData,
+    authMiddleware,
+    isAuth
 
 }

@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
  
@@ -25,6 +26,8 @@ const [formData , setData] = useState({
     password: "",
 });
 
+const navigate = useNavigate();
+
 
 // const handleInputChange = (e) => {
 //     setData({
@@ -38,7 +41,11 @@ const OnSubmit = async (data) => {
         // Faites la requête POST vers votre API d'enregistrement
         const response = await axios.post("http://localhost:3001/api/login", data);
           if (response.data.message){
+            localStorage.setItem("user", JSON.stringify(response.data.data))
               login(response.data.data)
+
+
+              navigate('/')
               
             toast.success(response.data.message, {
                 position: toast.POSITION.TOP_RIGHT, // Position en haut à droite

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function ForgotPassword() {
     const [formData, setFormData] = useState({
@@ -18,7 +21,23 @@ export default function ForgotPassword() {
         try {
             const response = await axios.post("http://localhost:3001/api/forgotpassword", formData);
             console.log(response.data);
+            const responseData = response.data;
+            if(responseData){
+
             
+            toast.success(responseData.message, {
+                position: toast.POSITION.TOP_RIGHT, 
+                style: {
+                  marginTop: "4rem",
+                  background: "#007bff", 
+                  color: "#fff", 
+                  borderRadius: "10px", 
+                  padding: "15px 25px", 
+                  fontSize: "18px", 
+                  textAlign: "center", 
+                },
+              });
+            }
             // Handle success, show a success message, or redirect the user
         } catch (error) {
             console.error("Error occurred:", error);

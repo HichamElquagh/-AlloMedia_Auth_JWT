@@ -1,6 +1,8 @@
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/users');
+const verifToken = require('../services/verifToken')
+// const verifToken = require('../services/')
 
 const validateRegistrationData = [
     body('first_name').notEmpty().withMessage('Le prénom est requis'),
@@ -37,11 +39,39 @@ const validateRegistrationData = [
     }
     next();
     }
-
-
-    
-
   ]
+
+  const authMiddleware = async(req,res,next)=>{
+    //get data from cookie
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }else{
+      const checktoken =verifToken(token)
+
+      if(checktoken){
+
+        const userdata = userModel.findOne({email : checktoken})
+         next();
+
+      }else{
+
+        return res.json({
+          message : "token expired"
+         })
+      }
+
+
+      
+
+    }
+
+  }
+
+
+
+
 
 module.exports = {
     validateRegistrationData,

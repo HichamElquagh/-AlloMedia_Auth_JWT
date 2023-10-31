@@ -9,6 +9,7 @@ import Navbar from "./components/navbar"
 import ForgotPassword from "./components/forgot.password"
 import ResetPassword from "./components/reset.password"
 import { AuthProvider } from "./contexts/AuthContext";
+import Home from './components/home';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     <BrowserRouter>
     <Navbar />
       <Routes>
+      <Route path='/' exact element={<Home />}></Route>
         <Route path='/login' exact element={<Login />}></Route>
         <Route path='/register' exact element={<Register/>}></Route>
         <Route path='/forgot-password' exact element={<ForgotPassword/>}></Route>

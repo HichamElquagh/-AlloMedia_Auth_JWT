@@ -242,13 +242,6 @@ const resetPassword =   async (req, res)=>{
 
         if(ischecked){
 
-        //     console.log( "hhhhhhhhhhhhhhh   lkhrrr");
-        // res.cookie('access_token', token, {
-        //     httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
-        //     secure: true, // Ensures the cookie is only sent over HTTPS in production
-        //     sameSite: 'Strict', // Protects against CSRF attacks
-        //     maxAge: 3600000, // Expiry time in milliseconds (1 hour in this case)
-        //   });
               
         res.send('vous pouver changer votre password ');
 
@@ -304,9 +297,43 @@ const resetPasswordAfterVerif = async (req , res)=>{
         
     }
 
+}
+const logout = async(req,res)=>{
+    const islogout =res.clearCookie('access_token');
+    if(islogout){
+       return res.status(200).json({
+        message : "vous avez deconecter"
+       })
+    }else{
+        return res.status(400).json({
+            message : "echec ?????????"
+           })
+    }
+}
 
+const profile= async(req,res)=>{
+console.log('eeeeeeeeeeeeeeeeeeee');
+     try {
+         const token =  req.cookies.access_token
 
+         const email = verifToken(token)
+         if(token){
+            const userdata = await userModel.findOne({email: email}).populate('role','role_name');
+      console.log('for profile', userdata);
+            if (userdata){
+     
+             return res.status(201).json({
+                 message : 'Bonjour '+ userdata.first_name ,
+                 role : 'votre role est '+ userdata.role.role_name 
+             })
+            }
+         }
+        
+     } catch (error) {
+        
+     }
 
+       
 
 }
 
@@ -316,5 +343,7 @@ module.exports = {
     verifyAcountwithchecktoken,
     forgotPassword,
     resetPassword,
-    resetPasswordAfterVerif
+    resetPasswordAfterVerif,
+    logout,
+    profile
 };

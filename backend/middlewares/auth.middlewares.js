@@ -43,10 +43,12 @@ const validateRegistrationData = [
 
   const authMiddleware = async(req,res,next)=>{
     //get data from cookie
-    const token = req.cookies.token;
+    const token = req.cookies.access_token;
+    console.log('hello');
+    console.log(token);
 
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'vous etes pas connecter ' });
     }else{
       const checktoken =verifToken(token)
 
@@ -65,17 +67,16 @@ const validateRegistrationData = [
 
   }
   const isAuth = async(req,res,next)=>{
-    const token = req.cookies.token;
+    const token = req.cookies.access_token;
 
     if (!token) {
-
       next()  
       }else{
       const checktoken =verifToken(token)
 
       if(checktoken){
         return res.json({
-          message: "vous aver deja fais login"
+          message: "vous aver deja fais login  "
         })
       }
 

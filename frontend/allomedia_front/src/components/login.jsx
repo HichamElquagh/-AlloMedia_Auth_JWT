@@ -17,36 +17,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login(){
 
-
-const { register, handleSubmit, formState: { errors } } = useForm();
-const { login } = useAuth();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { login , user } = useAuth();
+  // const [effectvalue , setvalue ] = useState();
 const navigate = useNavigate();
 
 useEffect(() => {
     // Check if the user is already logged in
-    if (login) {
+    if (user) {
       navigate('/home'); // Redirect to home if the user is already logged in
     }
-  }, [login, navigate]); 
-
-{/* const [formData , setData] = useState({
-     email: "",
-    password: "",
- }); */}
-
-// const navigate = useNavigate();
-
-// if(login){
-//     navigate('/home')
-// }
+  }, [user, navigate]); 
 
 
-// const handleInputChange = (e) => {
-//     setData({
-//         ...formData,
-//         [e.target.name]: e.target.value
-//     });
-// };
 const OnSubmit = async (data) => {
     try {
         // console.log(formData);
@@ -56,6 +39,9 @@ const OnSubmit = async (data) => {
             console.log(response.data.data);
             localStorage.setItem("user", JSON.stringify(response.data.data))
               login(response.data.data)
+              // setvalue(true);
+
+
               if (response.data.data) {
                  <Navigate to="/home" />;
               }              

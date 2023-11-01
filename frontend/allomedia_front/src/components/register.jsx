@@ -13,22 +13,23 @@ export default function Register() {
   //   last_name: "",
   //   email: "",
   //   password: "",
-  //   confirm_password: "",
+  //   confirm_password: "",http://localhost:3000/register
   // });
+  // const []= useState(false);
   const {
     register,
     handleSubmit,
     formState: {errors},
   } = useForm();
 
-  const ifregister = useAuth();
+  const {user} = useAuth();
   const navigate = useNavigate();
 
   useEffect(()=>{
-     if (ifregister) {
+     if (user) {
         navigate('/home')      
      }
-  },[ifregister, navigate])
+  },[user, navigate])
   
 
   // const handleInputChange = (e) => {

@@ -11,14 +11,15 @@ export default function ResetPassword() {
         // confirmPassword: "",
     });
 
-  const ifregister = useAuth();
-  const navigate = useNavigate();
+    const {user} = useAuth();
+    const navigate = useNavigate();
+  
+    useEffect(()=>{
 
-  useEffect(()=>{
-     if (ifregister) {
-        navigate('/home')      
-     }
-  },[ifregister, navigate])
+        if (user){
+           navigate('/home')
+        }
+    }, [user, navigate])
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get("token");

@@ -10,15 +10,15 @@ export default function ForgotPassword() {
         email: "",
     });
 
-    const ifregister = useAuth();
+    const {user} = useAuth();
     const navigate = useNavigate();
   
     useEffect(()=>{
 
-        if (ifregister){
+        if (user){
            navigate('/home')
         }
-    }, [ifregister, navigate])
+    }, [user, navigate])
 
     const handleInputChange = (e) => {
         setFormData({

@@ -87,16 +87,10 @@ const login = async (req , res)=>{
          const verifyexistEmail = await userModel.findOne({ email: loginEmail })
          .populate('role', 'role_name')
         //  .select('-_id -password -isverified');
-
-         console.log(verifyexistEmail);
-        console.log(verififemail);
          if (!verifyexistEmail) {
-              return  res.status(404).json({
-                    "message" : "email invalid  ",
-                })
+            return res.status(404).json({ message: "Utilisateur introuvable" });
+
         }
-        console.log('for password login' ,loginPassword.length , '000000');
-        console.log('this is for hash password comming from user table',verifyexistEmail.password);
 
         const comparePassword =  await bcrypt.compare(loginPassword,verifyexistEmail.password)
         console.log(comparePassword);
@@ -126,9 +120,8 @@ const login = async (req , res)=>{
         }           
         else{
 
-             return res.status(400).json({
-                 "message" : "password is incorrecte",
-             })
+                   return res.status(400).json({ message: "Mot de passe incorrect" });
+
 
          }
 

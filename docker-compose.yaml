@@ -1,0 +1,16 @@
+version: '3'
+services:
+  frontend:
+    build: ./frontend/allomedia_front
+    container_name: frontContainer
+    ports:
+      - "3000:3000"
+
+  backend:
+    build: ./backend
+    container_name: backContainer
+    ports:
+      - "3001:3001"
+    stdin_open: true
+    tty: true  
+

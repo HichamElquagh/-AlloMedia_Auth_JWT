@@ -32,7 +32,7 @@ Instructions on setting up the project locally.
 ### Installation
 
 1. **Pour installer et exécuter ce projet, procédez comme suit ::**
-- Clonez le référentiel sur votre machine locale à l'aide de la commande https://github.com/RachidDaoudii/AlloMedia.git
+- Clonez le référentiel sur votre machine locale à l'aide de la commande` git clone https://github.com/HichamElquagh/AlloMedia_Auth_JWT/`
 - Accédez au répertoire du projet à l'aide de la commande `cd backend`
 - Installez les dépendances requises à l'aide de la commande `npm install`
 - configurez les informations de votre base de données dans le fichier env-

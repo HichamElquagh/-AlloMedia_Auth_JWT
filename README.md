@@ -8,8 +8,8 @@ Bienvenue dans le projet de développement d'une application Fullstack JavaScrip
 
 - [About](#about)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [Usage](#usage)
 - [API Documentation](#api-documentation)
 - [Contributing](#contributing)

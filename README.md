@@ -32,16 +32,16 @@ Instructions on setting up the project locally.
 ### Installation
 
 1. **Pour installer et exécuter ce projet, procédez comme suit ::**
-Clonez le référentiel sur votre machine locale à l'aide de la commande https://github.com/RachidDaoudii/AlloMedia.git
-Accédez au répertoire du projet à l'aide de la commande `cd backend`
-Installez les dépendances requises à l'aide de la commande `npm install`
-configurez les informations de votre base de données dans le fichier env
-Démarrez le serveur à l'aide de la commande npm run dev
-Ouvrez votre navigateur Web et accédez à « http://localhost:3001 » pour afficher l'application.
-Accédez au répertoire du projet à l'aide de la commande cd 
-Installez les dépendances requises à l'aide de la commande `npm install`
-Démarrez le serveur à l'aide de la commande `npm run dev`
-Ouvrez votre navigateur Web et accédez à http://localhost:3000 pour afficher l'application
+- Clonez le référentiel sur votre machine locale à l'aide de la commande https://github.com/RachidDaoudii/AlloMedia.git
+- Accédez au répertoire du projet à l'aide de la commande `cd backend`
+- Installez les dépendances requises à l'aide de la commande `npm install`
+- configurez les informations de votre base de données dans le fichier env-
+- Démarrez le serveur à l'aide de la commande npm run dev
+- Ouvrez votre navigateur Web et accédez à « http://localhost:3001 » pour afficher l'application.
+- Accédez au répertoire du projet à l'aide de la commande cd 
+- Installez les dépendances requises à l'aide de la commande `npm install`
+- Démarrez le serveur à l'aide de la commande `npm run dev`
+- Ouvrez votre navigateur Web et accédez à http://localhost:3000 pour afficher l'application
 
 ## Technologies
 
